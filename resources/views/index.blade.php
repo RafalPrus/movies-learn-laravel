@@ -1,4 +1,4 @@
-@props(['popularMovies'])
+@props(['popularMovies', 'genres'])
 @extends('layouts.main')
 
 @section('content')
@@ -9,7 +9,7 @@
                 @foreach($popularMovies as $popularMovie)
                     <div class="mt-8">
                         <a href="#">
-                            <img src="img/parasite.jpg" alt="parasite" class="rounded-2xl hover:opacity-75 transition ease-in-out">
+                            <img src="https://image.tmdb.org/t/p/w500/{{ $popularMovie['poster_path'] }}" alt="parasite" class="rounded-2xl hover:opacity-75 transition ease-in-out">
                         </a>
                         <div class="mt-2">
                             <a href="#" class="text-lg mt-2 hover:text-gray-300">{{ $popularMovie['original_title'] }}</a>
@@ -21,10 +21,12 @@
                                 </svg>
                                 <span class="ml-1">{{ $popularMovie['vote_average'] * 10 }}%</span>
                                 <span class="mx-2">|</span>
-                                <span>Feb 18, 2020</span>
+                                <span>{{ \Carbon\Carbon::parse($popularMovie['release_date'])->format('M d, Y') }}</span>
                             </div>
                             <div class="text-gray-400 text-sm">
-                                Action, Drama, Thriller
+                                @foreach($popularMovie['genre_ids'] as $genreId)
+                                    {{ $genres[$genreId] }}@if(! $loop->last),@endif
+                                @endforeach
                             </div>
                         </div>
                     </div>
