@@ -9,14 +9,14 @@ class ActorViewModel extends ViewModel
 {
     public $actor;
     public $social;
-    public $knownFromMovies;
+    public $credits;
 
-    public function __construct($actor, $social, $knownFromMovies)
+    public function __construct($actor, $social, $credits)
     {
         //
         $this->actor = $actor;
         $this->social = $social;
-        $this->knownFromMovies = $knownFromMovies;
+        $this->credits = $credits;
     }
 
     public function actor()
@@ -48,7 +48,7 @@ class ActorViewModel extends ViewModel
 
     public function knownFromMovies()
     {
-        return collect($this->knownFromMovies)->sortByDesc('popularity')->take(5)->map(function ($movie) {
+        return collect($this->credits)->sortByDesc('popularity')->take(5)->map(function ($movie) {
             return collect($movie)->merge([
                 'poster_path' => "https://image.tmdb.org/t/p/w500//{$movie['poster_path']}",
                 'link_to_page' => "/movies/{$movie['id']}"
@@ -58,7 +58,32 @@ class ActorViewModel extends ViewModel
 
     public function credits()
     {
-        return $this->social()->sortBy('release_date');
+        return collect($this->credits)->map(function ($movie) {
+            if (isset($movie['release_date'])) {
+                $releaseDate = $movie['release_date'];
+            } elseif (isset($movie['first_air_date'])) {
+                $releaseDate = $movie['first_air_date'];
+            } else {
+                $releaseDate = '';
+            }
+
+            if (isset($movie['title'])) {
+                $title = $movie['title'];
+            } elseif (isset($movie['name'])) {
+                $title = $movie['name'];
+            } else {
+                $title = 'Untitled';
+            }
+
+
+            return collect($movie)->merge([
+                'release_year' => isset($releaseDate) ? Carbon::parse($releaseDate)->format('Y') : 'future',
+                'title' => $title,
+                'character' => $movie['character'] ?? '',
+                'link_to_page' => "/movies/{$movie['id']}"
+
+            ]);
+        })->sortBy('release_year');
     }
 
     private function actorAgeInYears($birthDate)

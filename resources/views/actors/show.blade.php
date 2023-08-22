@@ -1,4 +1,4 @@
-@props(['actor', 'social', 'knownFromMovies'])
+@props(['actor', 'social', 'knownFromMovies', 'credits'])
 @extends('layouts.main')
 
 @section('content')
@@ -72,7 +72,16 @@
     <div class="credits border-b border-gray-800">
         <div class="container mx-auto px-4 py-16">
             <h2 class="text-4xl font-semibold">Credits</h2>
-            
+            <ul class="list-disc leading-loose pl-5 mt-8">
+                @foreach ($credits as $credit)
+                    <li>
+                        {{ $credit['release_year'] }} &middot;
+                        <strong><a href="{{ $credit['link_to_page'] }}" class="hover:underline">{{ $credit['title'] }}</a></strong>
+                        as {{ $credit['character'] }}
+                    </li>
+                @endforeach
+
+            </ul>
         </div>
     </div> <!-- end credits-->
 @endsection
