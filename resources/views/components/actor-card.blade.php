@@ -1,6 +1,6 @@
 @props(['actor'])
 <div class="mt-8">
-    <a href="#">
+    <a href="{{ route('actors.show', $actor['id']) }}">
         <img src="{{ $actor['profile_path'] }}" alt="parasite" class="rounded-2xl hover:opacity-75 transition ease-in-out">
     </a>
     <div class="mt-2">
