@@ -55,6 +55,8 @@ class ViewActorsTest extends TestCase
         $response = $this->get(route('actors.show', 3101));
         $response->assertSuccessful();
 
+        $response->dumpSession();
+
         $response->assertSeeText('Will Smith');
         $response->assertSeeText('Philadelphia, Pennsylvania, U.S.A.');
         $response->assertSeeText('54 years old'); // may change in the future, it is dynamic
