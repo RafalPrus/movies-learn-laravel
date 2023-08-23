@@ -49,9 +49,20 @@ class ActorViewModel extends ViewModel
     public function knownFromMovies()
     {
         return collect($this->credits)->sortByDesc('popularity')->take(5)->map(function ($movie) {
+            if(isset($movie['title'])) {
+                $title = $movie['title'];
+                $prefix = '/movies/';
+            } elseif (isset($movie['name'])) {
+                $title = $movie['name'];
+                $prefix = '/tv/';
+            } else {
+                $title = 'Untitled';
+                $prefix = '/movies/';
+            }
             return collect($movie)->merge([
                 'poster_path' => "https://image.tmdb.org/t/p/w500//{$movie['poster_path']}",
-                'link_to_page' => "/movies/{$movie['id']}"
+                'link_to_page' => "{$prefix}{$movie['id']}",
+                'title' => $title
             ]);
         });
     }
