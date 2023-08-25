@@ -49,13 +49,11 @@ class ViewActorsTest extends TestCase
         Http::fake([
             'https://api.themoviedb.org/3/person/3101' => $this->fakeActor(),
             'https://api.themoviedb.org/3/person/3101/external_ids' => $this->fakeSocial(),
-            'https://api.themoviedb.org/3/person/3101/movie_credits' => $this->fakeCredits(),
+            'https://api.themoviedb.org/3/person/3101/combined_credits' => $this->fakeCredits(),
         ]);
 
         $response = $this->get(route('actors.show', 3101));
         $response->assertSuccessful();
-
-        $response->dumpSession();
 
         $response->assertSeeText('Will Smith');
         $response->assertSeeText('Philadelphia, Pennsylvania, U.S.A.');

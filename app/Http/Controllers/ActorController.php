@@ -54,7 +54,7 @@ class ActorController extends Controller
             ->json();
 
         $credits = Http::withToken(config('services.tmdb.token'))
-            ->get("https://api.themoviedb.org/3/person/{$id}/movie_credits")
+            ->get("https://api.themoviedb.org/3/person/{$id}/combined_credits")
             ->json()['cast'];
 
 
